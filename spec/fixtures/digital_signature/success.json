@@ -1,0 +1,8 @@
+{
+  "Content-Type": "application/json",
+  "Content-Digest": "sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:",
+  "x-ebay-signature-key": "5",
+  "Signature": "sig1=:MVR/DZ+cIqbKZtCYHKgIwSsuXFDUf4XIsU5ZEZ5bYSSK/asDSBScjGy8kuu12llmWobHw6GW6QyGY8no8hYlprG41XJ1RdxoSnLHKp8se2aT+wuZtKVUiH6SZrRxkhMHdyRJUtDaFMOdnu/bG0ewZkJ6Ru+uxA0wZptSOjraC+c=:",
+  "Signature-Input": "sig1=(\"content-digest\" \"x-ebay-signature-key\" \"@method\" \"@path\" \"@authority\");created=1546300800",
+  "x-ebay-enforce-signature": "true"
+}

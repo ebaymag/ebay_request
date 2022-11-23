@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class EbayRequest::Base
+  class DigitalSignatureError < EbayRequest::Error; end
   def initialize(options = {})
     @options = options
   end
@@ -14,15 +15,15 @@ class EbayRequest::Base
   def siteid
     @siteid ||=
       options[:siteid] ||
-      EbayRequest::Config.site_id_from_globalid(options[:globalid]) ||
-      0
+        EbayRequest::Config.site_id_from_globalid(options[:globalid]) ||
+        0
   end
 
   def globalid
     @globalid ||=
       options[:globalid] ||
-      EbayRequest::Config.globalid_from_site_id(options[:siteid]) ||
-      "EBAY-US"
+        EbayRequest::Config.globalid_from_site_id(options[:siteid]) ||
+        "EBAY-US"
   end
 
   def response(callname, payload)
@@ -78,6 +79,15 @@ class EbayRequest::Base
     h = headers(callname)
     b = payload(callname, request)
 
+    if options[:digital_signature]
+      h = EbayRequest::DigitalSignature.new(
+        body: b,
+        headers: h,
+        url: url.to_s,
+        config: config
+      ).call
+    end
+
     post = Net::HTTP::Post.new(url.path, h)
     post.body = b
 
@@ -117,4 +127,34 @@ class EbayRequest::Base
   def errors_for(_response)
     raise NotImplementedError, "Implement #{self.class.name}#errors_for"
   end
+
+  # https://developer.ebay.com/develop/guides/digital-signatures-for-apis
+  DIGITAL_SIGNATURE_ERRORS = {
+    215_000 => DigitalSignatureError,
+    215_001 => DigitalSignatureError,
+    215_002 => DigitalSignatureError,
+    215_003 => DigitalSignatureError,
+    215_101 => DigitalSignatureError,
+    215_102 => DigitalSignatureError,
+    215_103 => DigitalSignatureError,
+    215_104 => DigitalSignatureError,
+    215_105 => DigitalSignatureError,
+    215_106 => DigitalSignatureError,
+    215_107 => DigitalSignatureError,
+    215_108 => DigitalSignatureError,
+    215_109 => DigitalSignatureError,
+    215_110 => DigitalSignatureError,
+    215_111 => DigitalSignatureError,
+    215_112 => DigitalSignatureError,
+    215_113 => DigitalSignatureError,
+    215_114 => DigitalSignatureError,
+    215_115 => DigitalSignatureError,
+    215_116 => DigitalSignatureError,
+    215_117 => DigitalSignatureError,
+    215_118 => DigitalSignatureError,
+    215_119 => DigitalSignatureError,
+    215_120 => DigitalSignatureError,
+    215_121 => DigitalSignatureError,
+    215_122 => DigitalSignatureError
+  }.freeze
 end

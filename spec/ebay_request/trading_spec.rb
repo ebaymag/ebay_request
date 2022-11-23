@@ -64,6 +64,23 @@ xmlns="urn:ebay:apis:eBLBaseComponents">\
 </Errors></AddItemResponse>)
   end
 
+  let(:response_with_digital_signature_error) do
+    %(<AddItemResponse
+	xmlns="urn:ebay:apis:eBLBaseComponents">
+	<Timestamp>2022-11-27T21:46:17.642Z</Timestamp>
+	<Ack>Failure</Ack>
+	<Errors>
+		<ShortMessage>Signature validation failed</ShortMessage>
+		<LongMessage>Signature validation failed to fulfill the request.</LongMessage>
+		<ErrorCode>215120</ErrorCode>
+		<SeverityCode>Error</SeverityCode>
+		<ErrorClassification>RequestError</ErrorClassification>
+	</Errors>
+	<Version>1201</Version>
+	<Build>E1201_CORE_API6_19110890_R1</Build>
+</AddItemResponse>)
+  end
+
   let(:response_with_warning) do
     %(<AddItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">
 <Timestamp>2016-04-18T12:12:26.600Z</Timestamp><Ack>Warning</Ack><Errors>
@@ -84,6 +101,7 @@ xmlns="urn:ebay:apis:eBLBaseComponents">\
 <LongMessage>Some other warning</LongMessage>
 </Errors></AddItemResponse>)
   end
+
   let(:response_with_multiple_errors_and_params) do
     File.read("spec/fixtures/response_with_multiple_parameterized_errors.xml")
   end
@@ -105,6 +123,30 @@ xmlns="urn:ebay:apis:eBLBaseComponents">\
     expect(response.warnings).to be_empty
 
     expect(response.data!).to be
+  end
+
+  it "#response with digital signature error" do
+    stub_request(
+      :post, "https://api.sandbox.ebay.com/ws/api.dll"
+    )
+      .with(
+        body: failing_request,
+        headers: headers
+      )
+      .to_return(status: 200, body: response_with_digital_signature_error)
+
+    response = subject.response("AddItem", Item: { Title: "i" })
+
+    expect(response).not_to be_success
+    expect(response.errors).to contain_error(
+      code: 215_120, message: "Signature validation failed to fulfill the request."
+    )
+    expect(response.warnings).to be_empty
+
+    expect { response.data! }.to raise_error(
+      EbayRequest::Error,
+      "Signature validation failed to fulfill the request."
+    )
   end
 
   it "#response with single error" do

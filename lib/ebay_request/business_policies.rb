@@ -90,5 +90,6 @@ class EbayRequest::BusinessPolicies < EbayRequest::Base
   FATAL_ERRORS = {
     21_917_053 => IAFTokenExpired,
     178_149 => DuplicationError,
+    **DIGITAL_SIGNATURE_ERRORS
   }.freeze
 end

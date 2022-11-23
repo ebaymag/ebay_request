@@ -63,6 +63,22 @@ end
 EbayRequest::Finding.new(env: :sandbox).response("findItemsByKeywords", keywords: "abc")
 ```
 
+## Use Digital signature
+
+```ruby
+# works only with RSA keys
+EbayRequest.configure do |config|
+  config.digital_signature_jwe = secrets[:digital_signature_jwe]
+  config.digital_signature_private_key = secrets[:digital_signature_private_key]
+  # And so on
+  # ...
+end
+
+EbayRequest::Trading.new(digital_signature: true).response('GetAccount', ...some data...)
+```
+
+
+
 ## OmniAuth strategy
 
 If gem is configured somewhere at initializer (shown above):
