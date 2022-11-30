@@ -36,5 +36,5 @@ class EbayRequest::Finding < EbayRequest::Base
     end
   end
 
-  FATAL_ERRORS = {}.freeze
+  FATAL_ERRORS = {**DIGITAL_SIGNATURE_ERRORS}.freeze
 end

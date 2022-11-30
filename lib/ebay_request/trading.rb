@@ -103,5 +103,6 @@ class EbayRequest::Trading < EbayRequest::Base
     11_106 => AccountClosed,
     21_930 => AccountClosed,
     127 => ApplicationInvalid,
+    **DIGITAL_SIGNATURE_ERRORS
   }.freeze
 end
