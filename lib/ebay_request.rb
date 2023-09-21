@@ -89,7 +89,7 @@ module EbayRequest
     end
 
     def fix_utf(response)
-      response.encode(
+      response&.encode(
         "UTF-8", undef: :replace, invalid: :replace, replace: " "
       )
     end
