@@ -91,7 +91,7 @@ class EbayRequest::Base
     post = Net::HTTP::Post.new(url.path, h)
     post.body = b
 
-    response, time = make_request(url, post)
+    response, time, header = make_request(url, post)
 
     response_object = process(parse(response), callname)
   ensure
@@ -100,6 +100,7 @@ class EbayRequest::Base
       callname: callname,
       headers: h,
       request_payload: b,
+      response_headers: header,
       response_payload: response,
       time: time,
       warnings: response_object&.warnings,
@@ -113,8 +114,8 @@ class EbayRequest::Base
   def make_request(url, post)
     start_time = Time.now
     http = prepare(url)
-    response = http.start { |r| r.request(post) }.body
-    [response, Time.now - start_time]
+    response = http.start { |r| r.request(post) }
+    [response.body, Time.now - start_time, response.header]
   end
 
   def prepare(url)
