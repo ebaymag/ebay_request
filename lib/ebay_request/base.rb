@@ -115,7 +115,13 @@ class EbayRequest::Base
     start_time = Time.now
     http = prepare(url)
     response = http.start { |r| r.request(post) }
-    [response.body, Time.now - start_time, response.header]
+    [response.body, Time.now - start_time, format_headers(response)]
+  end
+
+  def format_headers(resp)
+    resp.header.to_json
+  rescue StandardError
+    ""
   end
 
   def prepare(url)
