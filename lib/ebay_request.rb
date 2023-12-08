@@ -59,7 +59,7 @@ module EbayRequest
       logger.info "[EbayRequest] | Version  | #{out[:version]}"
       logger.info "[EbayRequest] | Headers  | #{out[:headers]}"
       logger.info "[EbayRequest] | Body     | #{out[:request_payload]}"
-      logger.info "[EbayRequest] | Res Hds  | #{out[:response_headers]}"
+      logger.info "[EbayRequest] | Response Headers | #{out[:response_headers]}"
       logger.info "[EbayRequest] | Response | #{fix_utf out[:response_payload]}"
       logger.info "[EbayRequest] | Time     | #{out[:time]} #{out[:callname]}"
     end
