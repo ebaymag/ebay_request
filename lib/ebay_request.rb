@@ -49,6 +49,7 @@ module EbayRequest
       log_warnings(options)
       log_version_mismatch(options)
       log_json(options)
+      log_request(options)
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -93,6 +94,17 @@ module EbayRequest
       response&.encode(
         "UTF-8", undef: :replace, invalid: :replace, replace: " "
       )
+    end
+
+    def log_request(out)
+      Thread.current[:request_callname] = out[:callname]
+      Thread.current[:request_url] = out[:url]
+      Thread.current[:request_version] = out[:version]
+      Thread.current[:request_headers] = out[:headers]
+      Thread.current[:response_body] = out[:request_payload]
+      Thread.current[:request_headers] = out[:response_headers]
+      Thread.current[:request_response] = fix_utf out[:response_payload]
+      Thread.current[:request_time] = out[:time]
     end
   end
 end
