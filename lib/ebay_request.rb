@@ -102,9 +102,9 @@ module EbayRequest
       Thread.current[:request_version] = out[:version]
       Thread.current[:request_headers] = out[:headers]
       Thread.current[:response_body] = out[:request_payload]
-      Thread.current[:request_headers] = out[:response_headers]
-      Thread.current[:request_response] = fix_utf out[:response_payload]
-      Thread.current[:request_time] = out[:time]
+      Thread.current[:response_headers] = out[:response_headers]
+      Thread.current[:response_body] = fix_utf out[:response_payload]
+      Thread.current[:response_time] = out[:time]
     end
   end
 end
