@@ -91,7 +91,7 @@ class EbayRequest::Base
     post = Net::HTTP::Post.new(url.path, h)
     post.body = b
 
-    response, time, header = make_request(url, post)
+    response, time, header, code = make_request(url, post)
 
     response_object = process(parse(response), callname)
   ensure
@@ -106,7 +106,8 @@ class EbayRequest::Base
       warnings: response_object&.warnings,
       errors: response_object&.errors,
       success: response_object&.success?,
-      version: response_object&.version
+      version: response_object&.version,
+      code: code
     )
   end
   # rubocop:enable Metrics/MethodLength
@@ -115,7 +116,7 @@ class EbayRequest::Base
     start_time = Time.now
     http = prepare(url)
     response = http.start { |r| r.request(post) }
-    [response.body, Time.now - start_time, format_headers(response)]
+    [response.body, Time.now - start_time, format_headers(response),response.code]
   end
 
   def format_headers(resp)
