@@ -111,6 +111,8 @@ module EbayRequest
       Thread.current[:response_body] = fix_utf out[:response_payload]
       Thread.current[:response_time] = out[:time]
       Thread.current[:response_code] = out[:code]
+    rescue StandardError
+      nil
     end
   end
 end
