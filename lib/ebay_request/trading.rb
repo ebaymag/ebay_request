@@ -30,7 +30,7 @@ class EbayRequest::Trading < EbayRequest::Base
   end
 
   def endpoint
-    "https://api%{sandbox}.ebay.com/ws/api.dll"
+    "https://eazye.qa.ebay.com/ws/api.dll"
   end
 
   def headers(callname)
