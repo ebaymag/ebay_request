@@ -105,6 +105,7 @@ class EbayRequest::Trading < EbayRequest::Base
     21_930 => AccountClosed,
     127 => ApplicationInvalid,
     17 => ItemDeletedError,
+    21_920_397 => ItemDeletedError,
     **DIGITAL_SIGNATURE_ERRORS
   }.freeze
 end
