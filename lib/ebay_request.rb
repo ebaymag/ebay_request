@@ -96,7 +96,7 @@ module EbayRequest
       )
     end
 
-    APIS = %w(AddFixedPriceItem ReviseFixedPriceItem EndFixedPriceItem ReviseInventoryStatus addSellerProfile removeProfile setSellerProfile)
+    APIS = %w(AddFixedPriceItem ReviseFixedPriceItem EndFixedPriceItem ReviseInventoryStatus addSellerProfile removeProfile setSellerProfile GetItem)
     def log_request(out)
       return unless APIS.include?(out[:callname])
 
